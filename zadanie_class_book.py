@@ -11,7 +11,7 @@ class Book:
   def new_book(self,title, author, isbn):
       self.title=title
       self.author=author
-      self.isbn=isbn
+      self.isbn=int(isbn)
       self.available=True
   def borrow(self):
       self.available=False
