@@ -49,7 +49,8 @@ def delete_task (title):
 
 def print_all_tasks ():
     for i in zadania:
-        print(f"tytuł: {zadania[i]["title"]},\nopis: {zadania[i]["description"]},\ndata realizacji: {zadania[i]["date_of_realization"]},\nstatus: {zadania[i]["status"]}\n")
+        pass
+        # print(f"tytuł: {zadania[i]["title"]},\nopis: {zadania[i]["description"]},\ndata realizacji: {zadania[i]["date_of_realization"]},\nstatus: {zadania[i]["status"]}\n")
 
 # add_new_task("siema","jak tam","2024-10-01")
 # add_new_task("siema","jAak tam","20A24-10-01")
@@ -67,10 +68,6 @@ def print_all_tasks ():
 # print(zadania["siema"])
 # delete_task(0)
 # print(zadania[0])
-
-# menu = Tk()
-# w = Label(menu, text='GeeksForGeeks.org!')
-# w.pack()
 
 
 
@@ -90,6 +87,14 @@ listbox = Listbox(menu, height = 10,
                   yscrollcommand=scrollbar.set)
 scrollbar.config(command=listbox.yview) 
 
+def reload_listbox ():
+    listbox.delete('0','end')
+    n=0
+    for i in zadania:
+        listbox.insert(n, str(zadania[i]["title"]))
+        n+=1
+
+reload_listbox()
  
 label = Label(menu, text = "Nazwy zadań",bg='white',width=19) 
 task_info = Label(menu,text="Hello world",bg='lightgray', width=100)
@@ -103,31 +108,22 @@ def add_new_task():
 def change_state():
     index = int(listbox.curselection()[0])
     title = listbox.get(index)
-    print(title)
+    task_completed(title)
+    task_info.config(text=" ")
+    reload_listbox()
 
 def on_select(event):
     w = event.widget
     index = int(w.curselection()[0])
     title = w.get(index)
     #wyświetl po prawej tytuł opis datę i status
-    #dwa przyciski, jeden do zmienienia statusu na wykonane a drugi do usunięcia
-    #print(f'You selected item {index}: "{value}"')
     task_info.config(text=str(zadania[title]))
     change_state_button.config(command=change_state)
     #delete_task_button.config(command=delete_task(title))
 
-new_task_button = Button(menu, text='new task', width=18, command=add_new_task())
-change_state_button = Button(menu, text='change state', width=18, command=None)
+new_task_button = Button(menu, text='new task', width=18, command=add_new_task)
+change_state_button = Button(menu, text='change state', width=18, command=change_state)
 delete_task_button = Button(menu, text='delete task', width=18, command=None)
-
-
-
-listbox.insert(1, "siema")
-listbox.insert(2, "siema (2)")
-listbox.insert(3, "siema (3)")
-listbox.insert(4, "siema (4)")
-
-
 
 label.grid(row=0,column=0)
 listbox.grid(row=1, rowspan=10,column=0)
@@ -137,6 +133,5 @@ change_state_button.grid(row=11,column=1)
 delete_task_button.grid(row=11,column=2)
 
 listbox.bind('<<ListboxSelect>>', on_select)
-
 
 menu.mainloop()
